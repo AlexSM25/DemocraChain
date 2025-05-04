@@ -1,0 +1,343 @@
+proyectos <!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyectos - OpenBudget DAO</title>
+    <style>
+        /* ======= PALETA & VARIABLES (se integran con Bootstrap) ======= */
+        :root{
+            --bs-primary:#2F80ED;     /* Azul intenso */
+            --bs-secondary:#27AE60;   /* Verde acento */
+            --bs-success:#6FCF97;
+            --bs-danger:#EB5757;
+            --bs-warning:#F2C94C;
+            --bs-dark:#13161f;        /* Fondo profundo */
+        
+            /* Glass-Effect */
+            --glass-bg:rgba(255,255,255,.12);
+            --glass-brd:rgba(255,255,255,.28);
+        }
+        
+        /* ======= RESET BÁSICO ======= */
+        *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Tahoma,Geneva,sans-serif;}
+        body{
+            background:var(--bs-dark);
+            background-image:
+                radial-gradient(700px circle at 0 0, #1a56b0 0%, rgba(26,86,176,0) 70%),
+                radial-gradient(900px circle at 100% 100%, #27ae60 0%, rgba(39,174,96,0) 70%);
+            background-attachment:fixed;
+            color:#e9ecef;
+            line-height:1.6;
+        }
+        
+        /* ======= CONTENEDOR GENÉRICO ======= */
+        .container{max-width:1200px;padding:2rem;margin:0 auto;}
+        
+        /* ======= EFFECT GLASS ======= */
+        .glass{
+            backdrop-filter:blur(12px) saturate(120%);
+            -webkit-backdrop-filter:blur(12px) saturate(120%);
+            background:var(--glass-bg);
+            border:1px solid var(--glass-brd);
+            border-radius:1rem;
+        }
+        
+        /* ======= NAVBAR ======= */
+        header.navbar-glass{
+            position:sticky;top:0;z-index:100;
+            backdrop-filter:blur(18px);
+            -webkit-backdrop-filter:blur(18px);
+            background:rgba(19,22,31,.65);
+        }
+        .navbar-glass .navbar-brand{color:var(--bs-primary);font-weight:700;}
+        .navbar-glass .nav-link{color:#e9ecef!important;}
+        .navbar-glass .nav-link.active,
+        .navbar-glass .nav-link:hover{color:var(--bs-primary)!important;}
+        
+        /* ======= ENCABEZADO (HERO) ======= */
+        .page-header{
+            text-align:center;margin:2rem 0;
+        }
+        .page-header h1{
+            font-weight:800;
+            font-size:clamp(1.8rem,4vw,3rem);
+            color:var(--bs-primary);
+        }
+        
+        /* ======= FILTROS ======= */
+        .filters .btn{
+            font-weight:600;
+            border-radius:50rem;
+            backdrop-filter:blur(8px);
+            background:var(--glass-bg);
+            border:1px solid var(--glass-brd);
+            color:#e9ecef;
+            transition:.25s;
+        }
+        .filters .btn:hover,
+        .filters .btn.active{
+            color:#fff;
+            background:var(--bs-primary);
+            border-color:var(--bs-primary);
+        }
+        
+        /* ======= GRID PROYECTOS (Bootstrap row/col) ======= */
+        .project-card{
+            position:relative;
+            overflow:hidden;
+            transition:.25s transform,.25s box-shadow;
+        }
+        .project-card:hover{
+            transform:translateY(-6px);
+            box-shadow:0 6px 18px rgba(0,0,0,.25);
+        }
+        
+        /* Imagen placeholder */
+        .project-card .project-image{
+            height:170px;
+            background:#1a56b0;
+            display:flex;align-items:center;justify-content:center;
+            color:#fff;font-weight:500;font-size:1rem;
+        }
+        
+        /* Contenido */
+        .project-card .card-body{padding:1.5rem;}
+        .project-title{color:var(--bs-primary);font-size:1.05rem;font-weight:700;}
+        .project-budget{color:var(--bs-secondary);font-weight:700;font-size:.95rem;}
+        
+        /* Badges estado */
+        .badge-status{
+            font-size:.75rem;
+            padding:.35rem .6rem;
+        }
+        .badge-status.approved{background:var(--bs-success);}
+        .badge-status.pending{background:var(--bs-warning);color:#2d3748;}
+        .badge-status.rejected{background:var(--bs-danger);}
+        
+        /* Barra progreso */
+        .progress{height:8px;background:#ddd;border-radius:4px;overflow:hidden;}
+        .progress-bar{background:var(--bs-primary);}
+        
+        /* Botones acción */
+        .btn-vote{background:var(--bs-primary);color:#fff;}
+        .btn-vote:hover{background:#1a56b0;}
+        .btn-details{background:var(--bs-secondary);color:#fff;}
+        .btn-details:hover{background:#1b7e48;}
+        
+        /* ======= FOOTER ======= */
+        footer{
+            background:#000; /* negro traslúcido */
+            background:rgba(0,0,0,.75);
+            color:#ced4da;
+            padding:2.5rem 0;
+            margin-top:4rem;
+        }
+        footer h4{color:#fff;margin-bottom:1rem;}
+        footer a{color:#ced4da;text-decoration:none;opacity:.8;}
+        footer a:hover{opacity:1;}
+        
+        /* ======= SCROLLBAR ESTILIZADA (WebKit) ======= */
+        ::-webkit-scrollbar{width:8px;}
+        ::-webkit-scrollbar-thumb{background:#444;border-radius:4px;}
+        
+        /* ======= RESPONSIVE AJUSTES ======= */
+        @media(max-width:768px){
+            .navbar-collapse{background:rgba(19,22,31,.9);padding:1rem;border-radius:1rem;}
+            .filters .btn{margin-bottom:.5rem;}
+        }
+        @media(max-width:576px){
+            .project-card .card-body{padding:1rem;}
+        }
+        </style>
+</head>
+<body>
+    <header>
+        <div class="container nav-container">
+            <div class="logo">OpenBudget DAO</div>
+            <nav class="nav-links">
+                <a href="index.html">Inicio</a>
+                <a href="proyectos.html">Proyectos</a>
+                <a href="#votaciones">Votaciones</a>
+                <a href="#transparencia">Transparencia</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="page-header">
+                <h1>Proyectos en Votación</h1>
+                <p>Participa en la decisión de los proyectos de tu comunidad</p>
+            </div>
+
+            <div class="filters">
+                <button class="filter-button active">Todos</button>
+                <button class="filter-button">En Votación</button>
+                <button class="filter-button">Aprobados</button>
+                <button class="filter-button">Rechazados</button>
+            </div>
+
+            <div class="projects-grid">
+                <div class="project-card" data-project-id="1">
+                    <div class="project-image">
+                        [Imagen del Proyecto]
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">Renovación del Parque Central</h3>
+                        <div class="project-budget">Presupuesto: $2,500,000 MXN</div>
+                        <div class="project-status status-pending">En Votación</div>
+                        <div class="project-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 65%"></div>
+                            </div>
+                            <div>65% de votos a favor</div>
+                        </div>
+                        <div class="project-actions">
+                            <button class="action-button vote-button">Votar</button>
+                            <button class="action-button details-button">Detalles</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card" data-project-id="2">
+                    <div class="project-image">
+                        [Imagen del Proyecto]
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">Nueva Biblioteca Municipal</h3>
+                        <div class="project-budget">Presupuesto: $5,000,000 MXN</div>
+                        <div class="project-status status-approved">Aprobado</div>
+                        <div class="project-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 85%"></div>
+                            </div>
+                            <div>85% de votos a favor</div>
+                        </div>
+                        <div class="project-actions">
+                            <button class="action-button vote-button">Ver Resultados</button>
+                            <button class="action-button details-button">Detalles</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-section">
+                <h4>OpenBudget DAO</h4>
+                <p>Gobierno abierto y transparente para todos.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Enlaces</h4>
+                <a href="#documentacion">Documentación</a>
+                <a href="#terminos">Términos y Condiciones</a>
+                <a href="#privacidad">Política de Privacidad</a>
+            </div>
+            <div class="footer-section">
+                <h4>Contacto</h4>
+                <a href="mailto:info@openbudgetdao.org">info@openbudgetdao.org</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
+    <script>
+    // ABI y dirección del contrato
+    const openBudgetDaoAbi = [
+      {"inputs":[{"internalType":"address","name":"_token","type":"address"},{"internalType":"uint256","name":"_votingPeriod","type":"uint256"},{"internalType":"uint256","name":"_quorum","type":"uint256"}],"stateMutability":"nonpayable","type":"constructor"},
+      {"anonymous":false,"inputs":[{"indexed":true,"internalType":"uint256","name":"id","type":"uint256"},{"indexed":false,"internalType":"string","name":"title","type":"string"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"ProposalCreated","type":"event"},
+      {"anonymous":false,"inputs":[{"indexed":true,"internalType":"uint256","name":"id","type":"uint256"}],"name":"ProposalExecuted","type":"event"},
+      {"anonymous":false,"inputs":[{"indexed":true,"internalType":"uint256","name":"proposalId","type":"uint256"},{"indexed":true,"internalType":"address","name":"voter","type":"address"},{"indexed":false,"internalType":"bool","name":"support","type":"bool"}],"name":"Voted","type":"event"},
+      {"inputs":[{"internalType":"string","name":"_title","type":"string"},{"internalType":"string","name":"_description","type":"string"},{"internalType":"uint256","name":"_amount","type":"uint256"},{"internalType":"address","name":"_recipient","type":"address"}],"name":"createProposal","outputs":[],"stateMutability":"nonpayable","type":"function"},
+      {"inputs":[{"internalType":"uint256","name":"_proposalId","type":"uint256"},{"internalType":"bool","name":"_support","type":"bool"}],"name":"vote","outputs":[],"stateMutability":"nonpayable","type":"function"},
+      {"inputs":[{"internalType":"uint256","name":"_proposalId","type":"uint256"}],"name":"executeProposal","outputs":[],"stateMutability":"nonpayable","type":"function"},
+      {"inputs":[],"name":"proposalCount","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
+      {"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"proposals","outputs":[{"internalType":"uint256","name":"id","type":"uint256"},{"internalType":"string","name":"title","type":"string"},{"internalType":"string","name":"description","type":"string"},{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"address","name":"recipient","type":"address"},{"internalType":"uint256","name":"votesFor","type":"uint256"},{"internalType":"uint256","name":"votesAgainst","type":"uint256"},{"internalType":"uint256","name":"deadline","type":"uint256"},{"internalType":"bool","name":"executed","type":"bool"}],"stateMutability":"view","type":"function"}
+    ];
+    const openBudgetDaoAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+    let web3, openBudgetDaoContract, currentWallet;
+    let projects = [];
+
+    async function initWeb3AndContract() {
+      if (window.ethereum) {
+        web3 = new Web3(window.ethereum);
+        await window.ethereum.enable();
+        openBudgetDaoContract = new web3.eth.Contract(openBudgetDaoAbi, openBudgetDaoAddress);
+        const accounts = await web3.eth.getAccounts();
+        if (accounts.length > 0) {
+          currentWallet = accounts[0];
+        }
+      } else {
+        alert('Por favor instala MetaMask');
+      }
+    }
+
+    async function voteProposal(proposalId, support) {
+      if (!openBudgetDaoContract || !currentWallet) return;
+      try {
+        await openBudgetDaoContract.methods.vote(proposalId, support).send({ from: currentWallet });
+        alert('Voto registrado');
+        await loadProposalsFromBlockchain();
+      } catch (error) {
+        alert('Error al votar: ' + error.message);
+      }
+    }
+
+    async function loadProposalsFromBlockchain() {
+      if (!openBudgetDaoContract) return;
+      const count = await openBudgetDaoContract.methods.proposalCount().call();
+      projects = [];
+      for (let i = 1; i <= count; i++) {
+        const p = await openBudgetDaoContract.methods.proposals(i).call();
+        projects.push({
+          id: p.id,
+          title: p.title,
+          description: p.description,
+          budget: web3.utils.fromWei(p.amount, 'ether'),
+          status: p.executed ? 'Aprobado' : (Date.now()/1000 > p.deadline ? 'Rechazado' : 'En Votación'),
+          votes: Number(p.votesFor),
+          recipient: p.recipient,
+          deadline: p.deadline
+        });
+      }
+      renderProjects();
+    }
+
+    function renderProjects() {
+      const grid = document.querySelector('.projects-grid');
+      grid.innerHTML = '';
+      projects.forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'project-card';
+        div.innerHTML = `
+          <div class="project-image">[Imagen del Proyecto]</div>
+          <div class="project-content">
+            <h3 class="project-title">${p.title}</h3>
+            <div class="project-budget">Presupuesto: ${p.budget} ETH</div>
+            <div class="project-status status-${p.status === 'Aprobado' ? 'approved' : p.status === 'Rechazado' ? 'rejected' : 'pending'}">${p.status}</div>
+            <div class="project-progress">
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: ${p.votes}%"></div>
+              </div>
+              <div>${p.votes} votos a favor</div>
+            </div>
+            <div class="project-actions">
+              <button class="action-button vote-button" onclick="voteProposal(${p.id}, true)">${p.status === 'En Votación' ? 'Votar' : 'Ver Resultados'}</button>
+              <button class="action-button details-button" onclick="alert('Descripción: ${p.description}\nDestinatario: ${p.recipient}')">Detalles</button>
+            </div>
+          </div>
+        `;
+        grid.appendChild(div);
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', async function() {
+      await initWeb3AndContract();
+      await loadProposalsFromBlockchain();
+    });
+    </script>
+</body>
+</html>
